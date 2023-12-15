@@ -1,12 +1,12 @@
 {
-    "name": "hyperf/gotask",
+    "name": "bain2018/gotask",
     "type": "library",
     "license": "MIT",
     "keywords": [
         "php",
         "hyperf"
     ],
-    "description": "A replacement for Swoole TaskWorker in Go",
+    "description": "A replacement for Swoole TaskWorker in Go,upgrade to hyperf3.1",
     "autoload": {
         "psr-4": {
             "Hyperf\\GoTask\\": "src/"
