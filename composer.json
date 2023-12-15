@@ -20,18 +20,18 @@
     "require": {
         "php": ">=8.1",
         "ext-swoole": ">=5.0",
-        "hyperf/pool": "^3.0",
-        "hyperf/process": "^3.0",
+        "hyperf/pool": "^3.1",
+        "hyperf/process": "^3.1",
         "spiral/goridge": "^2.4",
-        "symfony/event-dispatcher": "^6.3"
+        "symfony/event-dispatcher": "^7.0.0"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^3.21",
-        "hyperf/command": "^3.0",
-        "hyperf/config": "^3.0",
-        "hyperf/di": "^3.0",
-        "hyperf/framework": "^3.0",
-        "hyperf/testing": "^3.0",
+        "friendsofphp/php-cs-fixer": "^3.41",
+        "hyperf/command": "^3.1",
+        "hyperf/config": "^3.1",
+        "hyperf/di": "^3.1",
+        "hyperf/framework": "^3.1",
+        "hyperf/testing": "^3.1",
         "mockery/mockery": "^1.6",
         "phpstan/phpstan": "^1.10",
         "swoole/ide-helper": "^5.0"
