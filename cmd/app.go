@@ -1,27 +1,65 @@
 package main
 
 import (
+	"bridge/pkg/gotask"
+	"bridge/pkg/mongo_client"
+	"context"
+	"go.mongodb.org/mongo-driver/v2/mongo"
+	"go.mongodb.org/mongo-driver/v2/mongo/options"
+	"go.mongodb.org/mongo-driver/v2/mongo/readconcern"
 	"log"
-
-	"github.com/hyperf/gotask/v2/pkg/gotask"
+	"runtime"
+	"time"
 )
 
-// App sample
-type App struct{}
-
-// Hi returns greeting message.
-func (a *App) Hi(name interface{}, r *interface{}) error {
-	*r = map[string]interface{}{
-		"hello": name,
+func recordNums(ctx context.Context) {
+	t := time.Tick(30 * time.Second)
+	for {
+		select {
+		case <-t:
+			num := runtime.NumGoroutine()
+			log.Printf(" current number %d\n", num)
+		}
 	}
-	return nil
 }
 
 func main() {
-	if err := gotask.Register(new(App)); err != nil {
+	mongoConfig := mongo_client.LoadConfig()
+
+	ctx, cancel := context.WithTimeout(context.Background(), mongoConfig.ConnectTimeout)
+	defer cancel()
+
+	go recordNums(ctx)
+
+	credential := options.Credential{
+		AuthSource:    mongoConfig.AuthSource,
+		AuthMechanism: mongoConfig.Mechanism,
+		Username:      mongoConfig.Username,
+		Password:      mongoConfig.Password,
+	}
+
+	log.Printf(" current address===> %s\n", gotask.GetAddress())
+
+	opts := options.Client().ApplyURI(mongoConfig.Uri).
+		SetAuth(credential).SetReadConcern(readconcern.Majority()).
+		SetMaxPoolSize(mongoConfig.MaxPoolSize).
+		SetMinPoolSize(mongoConfig.MaxPoolSize).SetMaxConnIdleTime(60 * time.Second)
+
+	client, err := mongo.Connect(opts)
+	if err != nil {
 		log.Fatalln(err)
 	}
-	if err := gotask.Run(); err != nil {
+
+	err = client.Ping(ctx, nil)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	if err = gotask.Register(mongo_client.NewMongoProxyWithTimeout(client, mongoConfig.ReadWriteTimeout)); err != nil {
+		log.Fatalln(err)
+	}
+
+	if err = gotask.Run(); err != nil {
 		log.Fatalln(err)
 	}
 }

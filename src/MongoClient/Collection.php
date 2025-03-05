@@ -20,9 +20,6 @@ use Hyperf\GoTask\MongoClient\Type\InsertManyResult;
 use Hyperf\GoTask\MongoClient\Type\InsertOneResult;
 use Hyperf\GoTask\MongoClient\Type\UpdateResult;
 
-use function MongoDB\BSON\fromPHP;
-use function MongoDB\BSON\toPHP;
-
 class Collection
 {
     use MongoTrait;
@@ -42,7 +39,8 @@ class Collection
         $data = $this->mongo->insertOne($this->makePayload([
             'Record' => $document,
         ], $opts));
-        return toPHP($data, ['root' => InsertOneResult::class]);
+        $document= \MongoDB\BSON\Document::fromBSON($data);
+        return $document->toPHP(['root' => InsertOneResult::class]);
     }
 
     public function insertMany($documents = [], array $opts = []): InsertManyResult
@@ -51,7 +49,9 @@ class Collection
         $data = $this->mongo->insertMany($this->makePayload([
             'Records' => $documents,
         ], $opts));
-        return toPHP($data, ['root' => InsertManyResult::class]);
+
+        $document= \MongoDB\BSON\Document::fromBSON($data);
+        return $document->toPHP(['root' => InsertManyResult::class]);
     }
 
     public function find($filter = [], array $opts = []): array|object
@@ -61,7 +61,8 @@ class Collection
             'Filter' => $filter,
         ], $opts));
         $typeMap = $opts['typeMap'] ?? $this->typeMap;
-        return $data !== '' ? toPHP($data, $typeMap) : [];
+        $document= \MongoDB\BSON\Document::fromBSON($data);
+        return $data === '' ? [] : $document->toPHP($typeMap);
     }
 
     public function findOne($filter = [], array $opts = []): array|object
@@ -71,7 +72,8 @@ class Collection
             'Filter' => $filter,
         ], $opts));
         $typeMap = $opts['typeMap'] ?? $this->typeMap;
-        return $data !== '' ? toPHP($data, $typeMap) : [];
+        $document= \MongoDB\BSON\Document::fromBSON($data);
+        return $data === '' ? [] : $document->toPHP($typeMap);
     }
 
     public function findOneAndDelete($filter = [], array $opts = []): array|object
@@ -81,7 +83,8 @@ class Collection
             'Filter' => $filter,
         ], $opts));
         $typeMap = $opts['typeMap'] ?? $this->typeMap;
-        return $data !== '' ? toPHP($data, $typeMap) : [];
+        $document= \MongoDB\BSON\Document::fromBSON($data);
+        return $data === '' ? [] : $document->toPHP($typeMap);
     }
 
     public function findOneAndUpdate($filter = [], $update = [], array $opts = []): array|object
@@ -92,7 +95,8 @@ class Collection
             'Update' => $update,
         ], $opts));
         $typeMap = $opts['typeMap'] ?? $this->typeMap;
-        return $data !== '' ? toPHP($data, $typeMap) : [];
+        $document= \MongoDB\BSON\Document::fromBSON($data);
+        return $data === '' ? [] : $document->toPHP($typeMap);
     }
 
     public function findOneAndReplace($filter = [], $replace = [], array $opts = []): array|object
@@ -103,7 +107,8 @@ class Collection
             'Replace' => $replace,
         ], $opts));
         $typeMap = $opts['typeMap'] ?? $this->typeMap;
-        return $data !== '' ? toPHP($data, $typeMap) : [];
+        $document= \MongoDB\BSON\Document::fromBSON($data);
+        return $data === '' ? [] : $document->toPHP($typeMap);
     }
 
     public function updateOne($filter = [], $update = [], array $opts = []): UpdateResult
@@ -114,7 +119,8 @@ class Collection
             'Filter' => $filter,
             'Update' => $update,
         ], $opts));
-        return toPHP($data, ['root' => UpdateResult::class]);
+        $document= \MongoDB\BSON\Document::fromBSON($data);
+        return  $document->toPHP(['root' => UpdateResult::class]);
     }
 
     public function updateMany($filter = [], $update = [], array $opts = []): UpdateResult
@@ -125,7 +131,9 @@ class Collection
             'Filter' => $filter,
             'Update' => $update,
         ], $opts));
-        return toPHP($data, ['root' => UpdateResult::class]);
+
+        $document= \MongoDB\BSON\Document::fromBSON($data);
+        return  $document->toPHP(['root' => UpdateResult::class]);
     }
 
     public function replaceOne($filter = [], $replace = [], array $opts = []): UpdateResult
@@ -136,7 +144,8 @@ class Collection
             'Filter' => $filter,
             'Replace' => $replace,
         ], $opts));
-        return toPHP($data, ['root' => UpdateResult::class]);
+        $document= \MongoDB\BSON\Document::fromBSON($data);
+        return  $document->toPHP(['root' => UpdateResult::class]);
     }
 
     public function countDocuments($filter = [], array $opts = []): int
@@ -154,7 +163,9 @@ class Collection
         $data = $this->mongo->deleteOne($this->makePayload([
             'Filter' => $filter,
         ], $opts));
-        return toPHP($data, ['root' => DeleteResult::class]);
+
+        $document= \MongoDB\BSON\Document::fromBSON($data);
+        return  $document->toPHP(['root' => DeleteResult::class]);
     }
 
     public function deleteMany($filter = [], array $opts = []): DeleteResult
@@ -163,7 +174,8 @@ class Collection
         $data = $this->mongo->deleteMany($this->makePayload([
             'Filter' => $filter,
         ], $opts));
-        return toPHP($data, ['root' => DeleteResult::class]);
+        $document= \MongoDB\BSON\Document::fromBSON($data);
+        return  $document->toPHP(['root' => DeleteResult::class]);
     }
 
     public function aggregate($pipeline = [], array $opts = []): array|object
@@ -173,7 +185,8 @@ class Collection
             'Pipeline' => $pipeline,
         ], $opts));
         $typeMap = $opts['typeMap'] ?? $this->typeMap;
-        return $data !== '' ? toPHP($data, $typeMap) : [];
+        $document= \MongoDB\BSON\Document::fromBSON($data);
+        return $data === '' ? [] : $document->toPHP($typeMap);
     }
 
     public function bulkWrite($operations = [], array $opts = []): BulkWriteResult
@@ -182,7 +195,9 @@ class Collection
         $data = $this->mongo->bulkWrite($this->makePayload([
             'Operations' => $operations,
         ], $opts));
-        return toPHP($data, ['root' => BulkWriteResult::class]);
+
+        $document= \MongoDB\BSON\Document::fromBSON($data);
+        return  $document->toPHP(['root' => BulkWriteResult::class]);
     }
 
     public function distinct(string $fieldName, $filter = [], array $opts = []): array|object
@@ -193,7 +208,8 @@ class Collection
             'Filter' => $filter,
         ], $opts));
         $typeMap = $opts['typeMap'] ?? $this->typeMap;
-        return $data !== '' ? toPHP($data, $typeMap) : [];
+        $document= \MongoDB\BSON\Document::fromBSON($data);
+        return $data === '' ? [] : $document->toPHP($typeMap);
     }
 
     public function createIndex($index = [], array $opts = []): string
@@ -210,13 +226,15 @@ class Collection
         $data = $this->mongo->createIndexes($this->makePayload([
             'Models' => $indexes,
         ], $opts));
-        return $data === '' ? [] : toPHP($data, ['root' => 'array']);
+        $document= \MongoDB\BSON\Document::fromBSON($data);
+        return $data === '' ? [] : $document->toPHP(['root' => 'array']);
     }
 
     public function listIndexes($indexes = [], array $opts = []): array|object
     {
         $data = $this->mongo->listIndexes($this->makePayload([], $opts));
-        return $data === '' ? [] : toPHP($data, ['root' => 'array', 'document' => IndexInfo::class, 'fieldPaths' => ['$.key' => 'array']]);
+        $document= \MongoDB\BSON\Document::fromBSON($data);
+        return $data === '' ? [] : $document->toPHP(['root' => 'array', 'document' => IndexInfo::class, 'fieldPaths' => ['$.key' => 'array']]);
     }
 
     public function dropIndex(string $name, array $opts = []): array|object
@@ -225,7 +243,8 @@ class Collection
             'Name' => $name,
         ], $opts));
         $typeMap = $opts['typeMap'] ?? $this->typeMap;
-        return $data === '' ? [] : toPHP($data, $typeMap);
+        $document= \MongoDB\BSON\Document::fromBSON($data);
+        return $data === '' ? [] : $document->toPHP($typeMap);
     }
 
     public function dropIndexes(array $opts = []): array|object
@@ -233,23 +252,28 @@ class Collection
         $data = $this->mongo->dropIndexes($this->makePayload([
         ], $opts));
         $typeMap = $opts['typeMap'] ?? $this->typeMap;
-        return $data === '' ? [] : toPHP($data, $typeMap);
+
+        $document= \MongoDB\BSON\Document::fromBSON($data);
+        return $data === '' ? [] : $document->toPHP($typeMap);
     }
 
     public function drop(): string
     {
-        return $this->mongo->drop(fromPHP([
+        $document= \MongoDB\BSON\Document::fromPHP([
             'Database' => $this->database,
             'Collection' => $this->collection,
-        ]));
+        ]);
+
+        return $this->mongo->drop($document->toCanonicalExtendedJSON());
     }
 
     private function makePayload(array $partial, array $opts): string
     {
-        return fromPHP(array_merge($partial, [
+        $document= \MongoDB\BSON\Document::fromPHP(array_merge($partial, [
             'Database' => $this->database,
             'Collection' => $this->collection,
             'Opts' => $this->sanitizeOpts($opts),
         ]));
+        return $document->toCanonicalExtendedJSON();
     }
 }

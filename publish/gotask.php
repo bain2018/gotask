@@ -9,6 +9,8 @@ declare(strict_types=1);
  * @contact  guxi99@gmail.com
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
+use function Hyperf\Support\env;
+
 return [
     'enable' => true,
     'executable' => BASE_PATH . '/bin/app',
@@ -34,4 +36,5 @@ return [
         'heartbeat' => -1,
         'max_idle_time' => (float) env('GOTASK_MAX_IDLE_TIME', 60),
     ],
+    'args' =>[]
 ];

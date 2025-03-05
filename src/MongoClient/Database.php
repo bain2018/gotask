@@ -46,10 +46,13 @@ class Database
             'Command' => $this->sanitize($command),
             'Opts' => $this->sanitizeOpts($opts),
         ];
-        $result = $this->mongo->runCommand(fromPHP($payload));
-        if ($result !== '') {
+
+        $document= \MongoDB\BSON\Document::fromPHP($payload);
+        $data = $this->mongo->runCommand($document->toCanonicalExtendedJSON());
+        if ($data !== '') {
             $typeMap = $opts['typeMap'] ?? $this->typeMap;
-            return toPHP($result, $typeMap);
+            $document= \MongoDB\BSON\Document::fromBSON($data);
+            return $document->toPHP($typeMap);
         }
         return '';
     }
@@ -61,10 +64,13 @@ class Database
             'Command' => $this->sanitize($command),
             'Opts' => $this->sanitizeOpts($opts),
         ];
-        $result = $this->mongo->runCommandCursor(fromPHP($payload));
-        if ($result !== '') {
+
+        $document= \MongoDB\BSON\Document::fromPHP($payload);
+        $data = $this->mongo->runCommandCursor($document->toCanonicalExtendedJSON());
+        if ($data !== '') {
             $typeMap = $opts['typeMap'] ?? $this->typeMap;
-            return toPHP($result, $typeMap);
+            $document= \MongoDB\BSON\Document::fromBSON($data);
+            return $document->toPHP($typeMap);
         }
         return '';
     }
