@@ -3,7 +3,7 @@ package log
 import (
 	"testing"
 
-	"github.com/hyperf/gotask/v2/pkg/gotask"
+	"github.com/bain2018/gotask/pkg/gotask"
 )
 
 func testInfo(t *testing.T) {

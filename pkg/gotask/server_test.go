@@ -1,14 +1,13 @@
 package gotask
 
 import (
-	"io/ioutil"
 	"log"
 	"os"
 	"testing"
 )
 
 func TestClearAddr(t *testing.T) {
-	dir, _ := ioutil.TempDir("", "")
+	dir, _ := os.MkdirTemp("", "")
 	defer os.Remove(dir)
 
 	if _, err := checkAddr("unix", dir+"/non-exist.sock"); err != nil {

@@ -1,9 +1,9 @@
 package main
 
 import (
-	"bridge/pkg/gotask"
-	"bridge/pkg/mongo_client"
 	"context"
+	"github.com/bain2018/gotask/pkg/gotask"
+	"github.com/bain2018/gotask/pkg/mongo_client"
 	"go.mongodb.org/mongo-driver/v2/mongo"
 	"go.mongodb.org/mongo-driver/v2/mongo/options"
 	"go.mongodb.org/mongo-driver/v2/mongo/readconcern"

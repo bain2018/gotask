@@ -3,10 +3,10 @@ package mongo_client
 import (
 	"encoding/binary"
 	"fmt"
-	"github.com/hyperf/gotask/v2/pkg/gotask"
+	"github.com/bain2018/gotask/pkg/gotask"
 	"github.com/pkg/errors"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/v2/bson"
+	"go.mongodb.org/mongo-driver/v2/mongo"
 )
 
 // BsonDeserialize deserializes bson cmd into a struct cmd
@@ -65,7 +65,7 @@ func ErrorFilter() gotask.Middleware {
 	return func(next gotask.Handler) gotask.Handler {
 		return func(cmd interface{}, r *interface{}) (e error) {
 			defer func() {
-				if e == mongo.ErrNilCursor || e == mongo.ErrNilDocument {
+				if errors.Is(e, mongo.ErrNilCursor) || errors.Is(e, mongo.ErrNilDocument) {
 					e = nil
 				}
 				e = errors.Wrap(e, "error while executing mongo command")

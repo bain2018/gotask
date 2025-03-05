@@ -2,6 +2,8 @@ package mongo_client
 
 import (
 	"flag"
+	"github.com/natefinch/lumberjack"
+	"log"
 	"os"
 	"time"
 )
@@ -10,12 +12,31 @@ type Config struct {
 	Uri              string
 	ConnectTimeout   time.Duration
 	ReadWriteTimeout time.Duration
+
+	Database    string
+	Username    string
+	Password    string
+	Mechanism   string
+	AuthSource  string
+	MaxPoolSize uint64
+	MinPoolSize uint64
 }
 
 var (
-	globalMongoUri              *string
-	globalMongoConnectTimeout   *time.Duration
-	globalMongoReadWriteTimeout *time.Duration
+	mongoUri         *string
+	connectTimeout   *time.Duration
+	readWriteTimeout *time.Duration
+
+	database    *string
+	username    *string
+	password    *string
+	mechanism   *string
+	authSource  *string
+	maxPoolSize *uint64
+	minPoolSize *uint64
+
+	logFile  *string
+	logLevel *string
 )
 
 func getTimeout(env string, fallback time.Duration) (result time.Duration) {
@@ -36,9 +57,28 @@ func LoadConfig() Config {
 	if !flag.Parsed() {
 		flag.Parse()
 	}
+
+	//log config
+	log.SetOutput(&lumberjack.Logger{
+		Filename:   *logFile,
+		MaxSize:    500, // megabytes
+		MaxBackups: 3,
+		MaxAge:     3,     //days
+		Compress:   false, // disabled by default
+	})
+
+	log.SetFlags(log.Ldate | log.Ltime | log.Lshortfile)
+
 	return Config{
-		*globalMongoUri,
-		*globalMongoConnectTimeout,
-		*globalMongoReadWriteTimeout,
+		Uri:              *mongoUri,
+		ConnectTimeout:   *connectTimeout,
+		ReadWriteTimeout: *readWriteTimeout,
+		Database:         *database,
+		Username:         *username,
+		Password:         *password,
+		Mechanism:        *mechanism,
+		AuthSource:       *authSource,
+		MaxPoolSize:      *maxPoolSize,
+		MinPoolSize:      *minPoolSize,
 	}
 }

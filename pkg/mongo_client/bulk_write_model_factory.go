@@ -1,9 +1,9 @@
 package mongo_client
 
 import (
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
+	"go.mongodb.org/mongo-driver/v2/bson"
+	"go.mongodb.org/mongo-driver/v2/mongo"
+	"go.mongodb.org/mongo-driver/v2/mongo/options"
 )
 
 func parseModels(arg []map[string][]bson.Raw) []mongo.WriteModel {
@@ -121,9 +121,9 @@ func makeModel(k string, v []bson.Raw) mongo.WriteModel {
 }
 
 type option struct {
-	Collation    *options.Collation   `bson:"collation"`
-	Upsert       bool                 `bson:"upsert"`
-	ArrayFilters options.ArrayFilters `bson:"arrayFilters"`
+	Collation *options.Collation `bson:"collation"`
+	Upsert    bool               `bson:"upsert"`
+	//ArrayFilters options.ArrayFilters `bson:"arrayFilters"`
 }
 
 func getOptions(v bson.Raw) *option {
