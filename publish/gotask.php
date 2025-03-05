@@ -22,7 +22,7 @@ return [
     'go_build' => [
         'enable' => false,
         'workdir' => BASE_PATH . '/gotask',
-        'command' => 'go build -o ../bin/app cmd/app.go',
+        'command' => 'go build -o ../bin/app ./app.go',
     ],
     'go_log' => [
         'redirect' => true,
