@@ -7,7 +7,7 @@ English | [中文](./README-CN.md)
 GoTask spawns a go process as a Swoole sidecar and establishes a bi-directional IPC to offload heavy-duties to Go. Think of it as a Swoole Taskworker in Go.
 
 ```bash
-composer require hyperf/gotask
+composer require bain2018/gotask
 ```
 
 ## Feature
