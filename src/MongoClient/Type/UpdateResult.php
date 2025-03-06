@@ -12,15 +12,16 @@ declare(strict_types=1);
 
 namespace Hyperf\GoTask\MongoClient\Type;
 
+use MongoDB\BSON\Int64;
 use MongoDB\BSON\Unserializable;
 
 class UpdateResult implements Unserializable
 {
-    private int $matchedCount;
+    private Int64 $matchedCount;
 
-    private int $modifiedCount;
+    private Int64 $modifiedCount;
 
-    private int $upsertedCount;
+    private Int64 $upsertedCount;
 
     private ?string $upsertedId;
 
@@ -40,17 +41,17 @@ class UpdateResult implements Unserializable
         return $this->upsertedId;
     }
 
-    public function getUpsertedCount(): int
+    public function getUpsertedCount(): Int64
     {
         return $this->upsertedCount;
     }
 
-    public function getModifiedCount(): int
+    public function getModifiedCount(): Int64
     {
         return $this->modifiedCount;
     }
 
-    public function getMatchedCount(): int
+    public function getMatchedCount(): Int64
     {
         return $this->matchedCount;
     }

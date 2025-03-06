@@ -12,20 +12,21 @@ declare(strict_types=1);
 
 namespace Hyperf\GoTask\MongoClient\Type;
 
+use MongoDB\BSON\Int64;
 use MongoDB\BSON\ObjectId;
 use MongoDB\BSON\Unserializable;
 
 class BulkWriteResult implements Unserializable
 {
-    private int $matchedCount;
+    private Int64 $matchedCount;
 
-    private int $modifiedCount;
+    private Int64 $modifiedCount;
 
-    private int $upsertedCount;
+    private Int64 $upsertedCount;
 
-    private int $deletedCount;
+    private Int64 $deletedCount;
 
-    private int $insertedCount;
+    private Int64 $insertedCount;
 
     /**
      * @var array<ObjectId>
@@ -42,22 +43,22 @@ class BulkWriteResult implements Unserializable
         $this->upsertedIds = (array) $data['upsertedids'];
     }
 
-    public function getMatchedCount(): int
+    public function getMatchedCount(): Int64
     {
         return $this->matchedCount;
     }
 
-    public function getModifiedCount(): int
+    public function getModifiedCount(): Int64
     {
         return $this->modifiedCount;
     }
 
-    public function getUpsertedCount(): int
+    public function getUpsertedCount(): Int64
     {
         return $this->upsertedCount;
     }
 
-    public function getDeletedCount(): int
+    public function getDeletedCount(): Int64
     {
         return $this->deletedCount;
     }
@@ -67,7 +68,7 @@ class BulkWriteResult implements Unserializable
         return (array) $this->upsertedIds;
     }
 
-    public function getinsertedCount(): int
+    public function getinsertedCount(): Int64
     {
         return $this->insertedCount;
     }
