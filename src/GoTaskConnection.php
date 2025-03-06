@@ -77,7 +77,7 @@ class GoTaskConnection extends Connection implements ConnectionInterface
     {
         $logger = $this->container->get(StdoutLoggerInterface::class);
         $logger->warning(sprintf('RemoteGoTask::__call failed, because ' . $exception->getMessage()));
-
+        $logger->warning(sprintf('RemoteGoTask::__call failed, Trace ' . $exception->getTraceAsString()));
         try {
             $this->reconnect();
             $result = $this->connection->{$name}(...$arguments);

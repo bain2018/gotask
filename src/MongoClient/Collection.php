@@ -264,7 +264,7 @@ class Collection
             'Collection' => $this->collection,
         ]);
 
-        return $this->mongo->drop($document->toCanonicalExtendedJSON());
+        return $this->mongo->drop((string) $document);
     }
 
     private function makePayload(array $partial, array $opts): string
@@ -274,6 +274,6 @@ class Collection
             'Collection' => $this->collection,
             'Opts' => $this->sanitizeOpts($opts),
         ]));
-        return $document->toCanonicalExtendedJSON();
+        return (string) $document;
     }
 }
