@@ -80,8 +80,7 @@ class ConfigProvider
             $root = '/tmp';
         }
 
-        $appName = env('APP_NAME');
-        $socketName = $appName . '_' . uniqid();
+        $socketName = env('APP_NAME');
         return $root . "/{$socketName}.sock";
     }
 }

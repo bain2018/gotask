@@ -11,9 +11,21 @@ declare(strict_types=1);
  */
 use function Hyperf\Support\env;
 
+$confs=\Kernel\Utils\Yaml::get('mongodb');
+
+$arr=[];
+foreach ($confs as $k=>$v)
+{
+    $arr[]="-{$k}";
+    $arr[]=$v;
+}
+
+$arr[]="-logFile";
+$arr[]=BASE_PATH."/runtime/logs/gotask.log";
+
 return [
     'enable' => true,
-    'executable' => BASE_PATH . '/bin/app',
+    'executable' => BASE_PATH . '/gotask/app',
     'socket_address' => \Hyperf\GoTask\ConfigProvider::address(),
     'go2php' => [
         'enable' => false,
@@ -22,7 +34,7 @@ return [
     'go_build' => [
         'enable' => false,
         'workdir' => BASE_PATH . '/gotask',
-        'command' => 'go build -o ../bin/app ./app.go',
+        'command' => 'go build -o ./app ./app.go',
     ],
     'go_log' => [
         'redirect' => true,

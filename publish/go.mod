@@ -1,4 +1,4 @@
-module github.com/bain2018/gotask
+module bridge
 go 1.24
 
 require (
