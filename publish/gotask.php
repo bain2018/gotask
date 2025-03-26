@@ -41,12 +41,12 @@ return [
         'level' => 'info',
     ],
     'pool' => [
-        'min_connections' => 1,
+        'min_connections' => 4,
         'max_connections' => 30,
         'connect_timeout' => 10.0,
         'wait_timeout' => 30.0,
         'heartbeat' => -1,
         'max_idle_time' => (float) env('GOTASK_MAX_IDLE_TIME', 60),
     ],
-    'args' =>[]
+    'args' =>$arr
 ];
