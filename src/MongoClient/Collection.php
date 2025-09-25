@@ -60,6 +60,11 @@ class Collection
         $data = $this->mongo->find($this->makePayload([
             'Filter' => $filter,
         ], $opts));
+
+        if ($data === '') {
+            return [];
+        }
+
         $typeMap = $opts['typeMap'] ?? $this->typeMap;
         $document= \MongoDB\BSON\Document::fromBSON($data);
         return $data === '' ? [] : $document->toPHP($typeMap);
@@ -71,6 +76,11 @@ class Collection
         $data = $this->mongo->findOne($this->makePayload([
             'Filter' => $filter,
         ], $opts));
+
+        if ($data === '') {
+            return [];
+        }
+
         $typeMap = $opts['typeMap'] ?? $this->typeMap;
         $document= \MongoDB\BSON\Document::fromBSON($data);
         return $data === '' ? [] : $document->toPHP($typeMap);
@@ -82,6 +92,11 @@ class Collection
         $data = $this->mongo->findOneAndDelete($this->makePayload([
             'Filter' => $filter,
         ], $opts));
+
+        if ($data === '') {
+            return [];
+        }
+
         $typeMap = $opts['typeMap'] ?? $this->typeMap;
         $document= \MongoDB\BSON\Document::fromBSON($data);
         return $data === '' ? [] : $document->toPHP($typeMap);
@@ -94,6 +109,11 @@ class Collection
             'Filter' => $filter,
             'Update' => $update,
         ], $opts));
+
+        if ($data === '') {
+            return [];
+        }
+
         $typeMap = $opts['typeMap'] ?? $this->typeMap;
         $document= \MongoDB\BSON\Document::fromBSON($data);
         return $data === '' ? [] : $document->toPHP($typeMap);
@@ -106,6 +126,11 @@ class Collection
             'Filter' => $filter,
             'Replace' => $replace,
         ], $opts));
+
+        if ($data === '') {
+            return [];
+        }
+
         $typeMap = $opts['typeMap'] ?? $this->typeMap;
         $document= \MongoDB\BSON\Document::fromBSON($data);
         return $data === '' ? [] : $document->toPHP($typeMap);
@@ -184,6 +209,9 @@ class Collection
         $data = $this->mongo->aggregate($this->makePayload([
             'Pipeline' => $pipeline,
         ], $opts));
+        if ($data === '') {
+            return [];
+        }
         $typeMap = $opts['typeMap'] ?? $this->typeMap;
         $document= \MongoDB\BSON\Document::fromBSON($data);
         return $data === '' ? [] : $document->toPHP($typeMap);
@@ -207,6 +235,9 @@ class Collection
             'FieldName' => $fieldName,
             'Filter' => $filter,
         ], $opts));
+        if ($data === '') {
+            return [];
+        }
         $typeMap = $opts['typeMap'] ?? $this->typeMap;
         $document= \MongoDB\BSON\Document::fromBSON($data);
         return $data === '' ? [] : $document->toPHP($typeMap);
@@ -226,6 +257,9 @@ class Collection
         $data = $this->mongo->createIndexes($this->makePayload([
             'Models' => $indexes,
         ], $opts));
+        if ($data === '') {
+            return [];
+        }
         $document= \MongoDB\BSON\Document::fromBSON($data);
         return $data === '' ? [] : $document->toPHP(['root' => 'array']);
     }
@@ -233,6 +267,9 @@ class Collection
     public function listIndexes($indexes = [], array $opts = []): array|object
     {
         $data = $this->mongo->listIndexes($this->makePayload([], $opts));
+        if ($data === '') {
+            return [];
+        }
         $document= \MongoDB\BSON\Document::fromBSON($data);
         return $data === '' ? [] : $document->toPHP(['root' => 'array', 'document' => IndexInfo::class, 'fieldPaths' => ['$.key' => 'array']]);
     }
@@ -242,6 +279,9 @@ class Collection
         $data = $this->mongo->dropIndex($this->makePayload([
             'Name' => $name,
         ], $opts));
+        if ($data === '') {
+            return [];
+        }
         $typeMap = $opts['typeMap'] ?? $this->typeMap;
         $document= \MongoDB\BSON\Document::fromBSON($data);
         return $data === '' ? [] : $document->toPHP($typeMap);
@@ -251,6 +291,9 @@ class Collection
     {
         $data = $this->mongo->dropIndexes($this->makePayload([
         ], $opts));
+        if ($data === '') {
+            return [];
+        }
         $typeMap = $opts['typeMap'] ?? $this->typeMap;
 
         $document= \MongoDB\BSON\Document::fromBSON($data);
