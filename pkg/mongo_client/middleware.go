@@ -65,7 +65,7 @@ func ErrorFilter() gotask.Middleware {
 	return func(next gotask.Handler) gotask.Handler {
 		return func(cmd interface{}, r *interface{}) (e error) {
 			defer func() {
-				if errors.Is(e, mongo.ErrNilCursor) || errors.Is(e, mongo.ErrNilDocument) {
+				if errors.Is(e, mongo.ErrNilCursor) || errors.Is(e, mongo.ErrNilDocument) || errors.Is(e, mongo.ErrNoDocuments) {
 					e = nil
 				}
 				e = errors.Wrap(e, "error while executing mongo command")
