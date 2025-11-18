@@ -25,7 +25,7 @@
         "hyperf/process": "^3.1",
         "spiral/goridge": "^2.4",
         "symfony/event-dispatcher": "^7.0.0",
-        "ext-mongodb": "^1.20",
+        "ext-mongodb": "^1.20|^2.0",
         "ext-sockets": "*"
     },
     "require-dev": {
