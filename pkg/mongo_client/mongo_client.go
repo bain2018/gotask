@@ -67,7 +67,7 @@ func (m *MongoProxy) InsertOne(payload []byte, result *[]byte) (err error) {
 	cmd := &InsertOneCmd{}
 	return m.exec(cmd, payload, result, func(ctx context.Context, r *interface{}) error {
 		collection := m.client.Database(cmd.Database).Collection(cmd.Collection)
-		*r, err = collection.InsertOne(ctx, cmd.Record, cmd.OptsList)
+		*r, err = collection.InsertOne(ctx, cmd.Record, cmd.Opts)
 		return err
 	})
 }
@@ -86,7 +86,7 @@ func (m *MongoProxy) InsertMany(payload []byte, result *[]byte) (err error) {
 	cmd := &InsertManyCmd{}
 	return m.exec(cmd, payload, result, func(ctx context.Context, r *interface{}) error {
 		collection := m.client.Database(cmd.Database).Collection(cmd.Collection)
-		*r, err = collection.InsertMany(ctx, cmd.Records, cmd.OptsList)
+		*r, err = collection.InsertMany(ctx, cmd.Records, cmd.Opts)
 		return err
 	})
 }
@@ -104,7 +104,7 @@ func (m *MongoProxy) FindOne(payload []byte, result *[]byte) error {
 	cmd := &FindOneCmd{}
 	return m.exec(cmd, payload, result, func(ctx context.Context, r *interface{}) (err error) {
 		collection := m.client.Database(cmd.Database).Collection(cmd.Collection)
-		err = collection.FindOne(ctx, cmd.Filter, cmd.OptsList).Decode(r)
+		err = collection.FindOne(ctx, cmd.Filter, cmd.Opts).Decode(r)
 		return err
 	})
 }
@@ -123,7 +123,7 @@ func (m *MongoProxy) FindOneAndDelete(payload []byte, result *[]byte) error {
 	cmd := &FindOneAndDeleteCmd{}
 	return m.exec(cmd, payload, result, func(ctx context.Context, r *interface{}) (err error) {
 		collection := m.client.Database(cmd.Database).Collection(cmd.Collection)
-		err = collection.FindOneAndDelete(ctx, cmd.Filter, cmd.OptsList).Decode(r)
+		err = collection.FindOneAndDelete(ctx, cmd.Filter, cmd.Opts).Decode(r)
 		return err
 	})
 }
@@ -143,7 +143,7 @@ func (m *MongoProxy) FindOneAndUpdate(payload []byte, result *[]byte) error {
 	cmd := &FindOneAndUpdateCmd{}
 	return m.exec(cmd, payload, result, func(ctx context.Context, r *interface{}) (err error) {
 		collection := m.client.Database(cmd.Database).Collection(cmd.Collection)
-		err = collection.FindOneAndUpdate(ctx, cmd.Filter, cmd.Update, cmd.OptsList).Decode(r)
+		err = collection.FindOneAndUpdate(ctx, cmd.Filter, cmd.Update, cmd.Opts).Decode(r)
 		return err
 	})
 }
@@ -163,7 +163,7 @@ func (m *MongoProxy) FindOneAndReplace(payload []byte, result *[]byte) error {
 	cmd := &FindOneAndReplaceCmd{}
 	return m.exec(cmd, payload, result, func(ctx context.Context, r *interface{}) (err error) {
 		collection := m.client.Database(cmd.Database).Collection(cmd.Collection)
-		err = collection.FindOneAndReplace(ctx, cmd.Filter, cmd.Replace, cmd.OptsList).Decode(r)
+		err = collection.FindOneAndReplace(ctx, cmd.Filter, cmd.Replace, cmd.Opts).Decode(r)
 		return err
 	})
 }
@@ -176,13 +176,17 @@ type FindCmd struct {
 	OptsList   options.Lister[options.FindOptions]
 }
 
+func (cmd *FindCmd) BuildOptsList() options.Lister[options.FindOptions] {
+	return cmd.Opts
+}
+
 // Find executes a find command and returns all the matching documents in the collection.
 func (m *MongoProxy) Find(payload []byte, result *[]byte) error {
 	cmd := &FindCmd{}
 	return m.exec(cmd, payload, result, func(ctx context.Context, r *interface{}) error {
 		var rr []interface{}
 		collection := m.client.Database(cmd.Database).Collection(cmd.Collection)
-		cursor, err := collection.Find(ctx, cmd.Filter, cmd.OptsList)
+		cursor, err := collection.Find(ctx, cmd.Filter, cmd.Opts)
 		if cursor != nil {
 			defer cursor.Close(ctx)
 			err = cursor.All(ctx, &rr)
@@ -206,7 +210,7 @@ func (m *MongoProxy) UpdateOne(payload []byte, result *[]byte) error {
 	cmd := &UpdateOneCmd{}
 	return m.exec(cmd, payload, result, func(ctx context.Context, r *interface{}) (err error) {
 		collection := m.client.Database(cmd.Database).Collection(cmd.Collection)
-		*r, err = collection.UpdateOne(ctx, cmd.Filter, cmd.Update, cmd.OptsList)
+		*r, err = collection.UpdateOne(ctx, cmd.Filter, cmd.Update, cmd.Opts)
 		return err
 	})
 }
@@ -225,7 +229,7 @@ func (m *MongoProxy) UpdateMany(payload []byte, result *[]byte) error {
 	cmd := &UpdateManyCmd{}
 	return m.exec(cmd, payload, result, func(ctx context.Context, r *interface{}) (err error) {
 		collection := m.client.Database(cmd.Database).Collection(cmd.Collection)
-		*r, err = collection.UpdateMany(ctx, cmd.Filter, cmd.Update, cmd.OptsList)
+		*r, err = collection.UpdateMany(ctx, cmd.Filter, cmd.Update, cmd.Opts)
 		return err
 	})
 }
@@ -244,7 +248,7 @@ func (m *MongoProxy) ReplaceOne(payload []byte, result *[]byte) error {
 	cmd := &ReplaceOneCmd{}
 	return m.exec(cmd, payload, result, func(ctx context.Context, r *interface{}) (err error) {
 		collection := m.client.Database(cmd.Database).Collection(cmd.Collection)
-		*r, err = collection.ReplaceOne(ctx, cmd.Filter, cmd.Replace, cmd.OptsList)
+		*r, err = collection.ReplaceOne(ctx, cmd.Filter, cmd.Replace, cmd.Opts)
 		return err
 	})
 }
@@ -262,7 +266,7 @@ func (m *MongoProxy) CountDocuments(payload []byte, result *[]byte) error {
 	cmd := &CountDocumentsCmd{}
 	return m.exec(cmd, payload, result, func(ctx context.Context, r *interface{}) (err error) {
 		collection := m.client.Database(cmd.Database).Collection(cmd.Collection)
-		*r, err = collection.CountDocuments(ctx, cmd.Filter, cmd.OptsList)
+		*r, err = collection.CountDocuments(ctx, cmd.Filter, cmd.Opts)
 		return err
 	})
 }
@@ -280,7 +284,7 @@ func (m *MongoProxy) DeleteOne(payload []byte, result *[]byte) error {
 	cmd := &DeleteOneCmd{}
 	return m.exec(cmd, payload, result, func(ctx context.Context, r *interface{}) (err error) {
 		collection := m.client.Database(cmd.Database).Collection(cmd.Collection)
-		*r, err = collection.DeleteOne(ctx, cmd.Filter, cmd.OptsList)
+		*r, err = collection.DeleteOne(ctx, cmd.Filter, cmd.Opts)
 		return err
 	})
 }
@@ -298,7 +302,7 @@ func (m *MongoProxy) DeleteMany(payload []byte, result *[]byte) error {
 	cmd := &DeleteManyCmd{}
 	return m.exec(cmd, payload, result, func(ctx context.Context, r *interface{}) (err error) {
 		collection := m.client.Database(cmd.Database).Collection(cmd.Collection)
-		*r, err = collection.DeleteMany(ctx, cmd.Filter, cmd.OptsList)
+		*r, err = collection.DeleteMany(ctx, cmd.Filter, cmd.Opts)
 		return err
 	})
 }
@@ -317,7 +321,7 @@ func (m *MongoProxy) Aggregate(payload []byte, result *[]byte) error {
 	return m.exec(cmd, payload, result, func(ctx context.Context, r *interface{}) (err error) {
 		var rr []interface{}
 		collection := m.client.Database(cmd.Database).Collection(cmd.Collection)
-		cursor, err := collection.Aggregate(ctx, cmd.Pipeline, cmd.OptsList)
+		cursor, err := collection.Aggregate(ctx, cmd.Pipeline, cmd.Opts)
 		if cursor != nil {
 			defer cursor.Close(ctx)
 			err = cursor.All(ctx, &rr)
@@ -340,7 +344,7 @@ func (m *MongoProxy) BulkWrite(payload []byte, result *[]byte) error {
 	return m.exec(cmd, payload, result, func(ctx context.Context, r *interface{}) (err error) {
 		collection := m.client.Database(cmd.Database).Collection(cmd.Collection)
 		models := parseModels(cmd.Operations)
-		*r, err = collection.BulkWrite(ctx, models, cmd.OptsList)
+		*r, err = collection.BulkWrite(ctx, models, cmd.Opts)
 		return err
 	})
 }
@@ -359,7 +363,7 @@ func (m *MongoProxy) Distinct(payload []byte, result *[]byte) error {
 	cmd := &DistinctCmd{}
 	return m.exec(cmd, payload, result, func(ctx context.Context, r *interface{}) (err error) {
 		collection := m.client.Database(cmd.Database).Collection(cmd.Collection)
-		return collection.Distinct(ctx, cmd.FieldName, cmd.Filter, cmd.OptsList).Err()
+		return collection.Distinct(ctx, cmd.FieldName, cmd.Filter, cmd.Opts).Err()
 	})
 }
 
@@ -380,7 +384,7 @@ func (m *MongoProxy) CreateIndex(payload []byte, result *[]byte) error {
 			Keys:    cmd.IndexKeys,
 			Options: cmd.Opts,
 		}
-		*r, err = collection.Indexes().CreateOne(ctx, model, cmd.OptsList)
+		*r, err = collection.Indexes().CreateOne(ctx, model, cmd.Opts)
 		return err
 	})
 }
@@ -398,7 +402,7 @@ func (m *MongoProxy) CreateIndexes(payload []byte, result *[]byte) error {
 	cmd := &CreateIndexesCmd{}
 	return m.exec(cmd, payload, result, func(ctx context.Context, r *interface{}) (err error) {
 		collection := m.client.Database(cmd.Database).Collection(cmd.Collection)
-		*r, err = collection.Indexes().CreateMany(ctx, cmd.Models, cmd.OptsList)
+		*r, err = collection.Indexes().CreateMany(ctx, cmd.Models, cmd.Opts)
 		return err
 	})
 }
@@ -415,7 +419,7 @@ func (m *MongoProxy) DropIndex(payload []byte, result *[]byte) error {
 	cmd := &DropIndexCmd{}
 	return m.exec(cmd, payload, result, func(ctx context.Context, r *interface{}) (err error) {
 		collection := m.client.Database(cmd.Database).Collection(cmd.Collection)
-		return collection.Indexes().DropOne(ctx, cmd.Name, cmd.OptsList)
+		return collection.Indexes().DropOne(ctx, cmd.Name, cmd.Opts)
 	})
 }
 
@@ -430,7 +434,7 @@ func (m *MongoProxy) DropIndexes(payload []byte, result *[]byte) error {
 	cmd := &DropIndexesCmd{}
 	return m.exec(cmd, payload, result, func(ctx context.Context, r *interface{}) (err error) {
 		collection := m.client.Database(cmd.Database).Collection(cmd.Collection)
-		return collection.Indexes().DropAll(ctx, cmd.OptsList)
+		return collection.Indexes().DropAll(ctx, cmd.Opts)
 	})
 }
 
@@ -446,7 +450,7 @@ func (m *MongoProxy) ListIndexes(payload []byte, result *[]byte) error {
 	return m.exec(cmd, payload, result, func(ctx context.Context, r *interface{}) (err error) {
 		var rr []interface{}
 		collection := m.client.Database(cmd.Database).Collection(cmd.Collection)
-		cursor, err := collection.Indexes().List(ctx, cmd.OptsList)
+		cursor, err := collection.Indexes().List(ctx, cmd.Opts)
 		if cursor != nil {
 			defer cursor.Close(ctx)
 			err = cursor.All(ctx, &rr)
@@ -483,7 +487,7 @@ func (m *MongoProxy) RunCommand(payload []byte, result *[]byte) error {
 	cmd := &Cmd{}
 	return m.exec(cmd, payload, result, func(ctx context.Context, r *interface{}) (err error) {
 		database := m.client.Database(cmd.Database)
-		return database.RunCommand(ctx, cmd.Command, cmd.OptsList).Decode(r)
+		return database.RunCommand(ctx, cmd.Command, cmd.Opts).Decode(r)
 	})
 }
 
@@ -495,7 +499,7 @@ func (m *MongoProxy) RunCommandCursor(payload []byte, result *[]byte) error {
 	return m.exec(cmd, payload, result, func(ctx context.Context, r *interface{}) (err error) {
 		var rr []interface{}
 		database := m.client.Database(cmd.Database)
-		cursor, err := database.RunCommandCursor(ctx, cmd.Command, cmd.OptsList)
+		cursor, err := database.RunCommandCursor(ctx, cmd.Command, cmd.Opts)
 		if cursor != nil {
 			defer cursor.Close(ctx)
 			err = cursor.All(ctx, &rr)
