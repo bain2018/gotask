@@ -7,7 +7,7 @@
         "hyperf",
         "gotask"
     ],
-    "description": "A replacement for Swoole TaskWorker in Go,upgrade to hyperf3.1 and mongodb-1.20",
+    "description": "A replacement for Swoole TaskWorker in Go,upgrade to hyperf3.1 and ^mongodb-1.20 || ^mongodb-2.1 ",
     "autoload": {
         "psr-4": {
             "Hyperf\\GoTask\\": "src/"
