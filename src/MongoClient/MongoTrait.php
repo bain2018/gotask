@@ -25,4 +25,9 @@ trait MongoTrait
     {
         return $this->sanitize($opts);
     }
+
+    private function sanitizeOptsList(array $opts): mixed
+    {
+        return $opts ?: new stdClass();
+    }
 }

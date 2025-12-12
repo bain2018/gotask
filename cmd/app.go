@@ -2,14 +2,15 @@ package main
 
 import (
 	"context"
+	"log"
+	"runtime"
+	"time"
+
 	"github.com/bain2018/gotask/pkg/gotask"
 	"github.com/bain2018/gotask/pkg/mongo_client"
 	"go.mongodb.org/mongo-driver/v2/mongo"
 	"go.mongodb.org/mongo-driver/v2/mongo/options"
 	"go.mongodb.org/mongo-driver/v2/mongo/readconcern"
-	"log"
-	"runtime"
-	"time"
 )
 
 func recordNums(ctx context.Context) {

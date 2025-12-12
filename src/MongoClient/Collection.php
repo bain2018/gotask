@@ -316,6 +316,7 @@ class Collection
             'Database' => $this->database,
             'Collection' => $this->collection,
             'Opts' => $this->sanitizeOpts($opts),
+            'OptsList' => $this->sanitizeOptsList($opts),
         ]));
         return (string) $document;
     }

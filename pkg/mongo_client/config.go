@@ -2,10 +2,11 @@ package mongo_client
 
 import (
 	"flag"
-	"github.com/natefinch/lumberjack"
 	"log"
 	"os"
 	"time"
+
+	"gopkg.in/natefinch/lumberjack.v2"
 )
 
 type Config struct {
