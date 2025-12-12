@@ -853,10 +853,7 @@ func (m *MongoProxy) CreateIndex(payload []byte, result *[]byte) error {
 			Keys:    cmd.IndexKeys,
 			Options: cmd.Opts,
 		}
-
-		opts := options.IndexOptions
-
-		*r, err = collection.Indexes().CreateOne(ctx, model, opts)
+		*r, err = collection.Indexes().CreateOne(ctx, model, cmd.OptsList)
 		return err
 	})
 }
