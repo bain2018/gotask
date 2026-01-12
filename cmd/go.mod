@@ -3,7 +3,7 @@ module bridge
 go 1.24
 
 require (
-	github.com/bain2018/gotask v0.0.0-20250925073401-4da0ceba89a7
+	github.com/bain2018/gotask v0.0.0-20260112051708-fd7264573399
 	go.mongodb.org/mongo-driver/v2 v2.4.1
 )
 
