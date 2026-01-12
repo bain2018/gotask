@@ -1,12 +1,13 @@
 package gotask
 
 import (
-	"github.com/fatih/pool"
-	"github.com/pkg/errors"
-	"github.com/spiral/goridge/v2"
 	"net"
 	"net/rpc"
 	"strings"
+
+	"github.com/fatih/pool"
+	"github.com/pkg/errors"
+	"github.com/spiral/goridge/v2"
 )
 
 type Pool struct {
@@ -15,23 +16,23 @@ type Pool struct {
 
 var globalPool *Pool
 
-//SetGo2PHPAddress sets the go2php server socket address
+// SetGo2PHPAddress sets the go2php server socket address
 func SetGo2PHPAddress(address string) {
 	*go2phpAddress = address
 }
 
-//GetGo2PHPAddress retrieves the go2php server socket address
+// GetGo2PHPAddress retrieves the go2php server socket address
 func GetGo2PHPAddress() string {
 	return *go2phpAddress
 }
 
-//NewAutoPool creates a connection pool using pre-defined addresses
+// NewAutoPool creates a connection pool using pre-defined addresses
 func NewAutoPool() (*Pool, error) {
 	addresses := strings.Split(*go2phpAddress, ",")
 	return NewPool(addresses)
 }
 
-//NewPool creates a connection pool
+// NewPool creates a connection pool
 func NewPool(addresses []string) (*Pool, error) {
 	index := 0
 	factory := func() (net.Conn, error) {

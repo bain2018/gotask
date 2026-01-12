@@ -369,18 +369,34 @@ func (m *MongoProxy) Find(payload []byte, result *[]byte) error {
 
 		builder := options.Find()
 
-		builder.SetCollation(cmd.Opts.Collation)
-		builder.SetComment(cmd.Opts.Comment)
-		builder.SetHint(cmd.Opts.Hint)
+		if cmd.Opts.Collation != nil {
+			builder.SetCollation(cmd.Opts.Collation)
+		}
 
-		builder.SetMax(cmd.Opts.Max)
+		if cmd.Opts.Comment != nil {
+			builder.SetComment(cmd.Opts.Comment)
+		}
+
+		if cmd.Opts.Hint != nil {
+			builder.SetHint(cmd.Opts.Hint)
+		}
+
+		if cmd.Opts.Max != nil {
+			builder.SetMax(cmd.Opts.Max)
+		}
 
 		if cmd.Opts.MaxAwaitTime != nil {
 			builder.SetMaxAwaitTime(*cmd.Opts.MaxAwaitTime)
 		}
-		builder.SetMin(cmd.Opts.Min)
-		//builder.SetOplogReplay()
-		builder.SetProjection(cmd.Opts.Projection)
+
+		if cmd.Opts.Min != nil {
+			builder.SetMin(cmd.Opts.Min)
+		}
+
+		if cmd.Opts.Projection != nil {
+			builder.SetProjection(cmd.Opts.Projection)
+		}
+
 		if cmd.Opts.ReturnKey != nil {
 			builder.SetReturnKey(*cmd.Opts.ReturnKey)
 		}
@@ -393,7 +409,10 @@ func (m *MongoProxy) Find(payload []byte, result *[]byte) error {
 			builder.SetSkip(*cmd.Opts.Skip)
 		}
 
-		builder.SetSort(cmd.Opts.Sort)
+		if cmd.Opts.Sort != nil {
+			builder.SetSort(cmd.Opts.Sort)
+		}
+
 		if cmd.Opts.AllowDiskUse != nil {
 			builder.SetAllowDiskUse(*cmd.Opts.AllowDiskUse)
 		}
@@ -406,7 +425,10 @@ func (m *MongoProxy) Find(payload []byte, result *[]byte) error {
 			builder.SetCursorType(*cmd.Opts.CursorType)
 		}
 
-		builder.SetLet(cmd.Opts.Let)
+		if cmd.Opts.Let != nil {
+			builder.SetLet(cmd.Opts.Let)
+		}
+
 		if cmd.Opts.Limit != nil {
 			builder.SetLimit(*cmd.Opts.Limit)
 		}
@@ -853,7 +875,14 @@ func (m *MongoProxy) CreateIndex(payload []byte, result *[]byte) error {
 			Keys:    cmd.IndexKeys,
 			Options: cmd.Opts,
 		}
-		*r, err = collection.Indexes().CreateOne(ctx, model, cmd.OptsList)
+
+		opts := options.CreateIndexes()
+
+		//if cmd.CreateOpts.CommitQuorum != nil {
+		//	opts.SetCommitQuorumInt(cmd.CreateOpts.CommitQuorum)
+		//}
+
+		*r, err = collection.Indexes().CreateOne(ctx, model, opts)
 		return err
 	})
 }

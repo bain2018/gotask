@@ -3,7 +3,6 @@ package gotask
 import (
 	"bytes"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"text/template"
@@ -118,7 +117,7 @@ func generatePHP(receiver interface{}) error {
 			return errors.Wrap(err, "invalid file path")
 		}
 
-		err = ioutil.WriteFile(fullPath, []byte(out), os.FileMode(0755))
+		err = os.WriteFile(fullPath, []byte(out), os.FileMode(0755))
 		if err != nil {
 			return errors.Wrap(err, "failed to generate PHP file")
 		}
