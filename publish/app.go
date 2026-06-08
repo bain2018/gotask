@@ -32,6 +32,8 @@ func main() {
 
 	go recordNums(ctx)
 
+	log.Printf(" current address===> %s\n", gotask.GetAddress())
+
 	credential := options.Credential{
 		AuthSource:    mongoConfig.AuthSource,
 		AuthMechanism: mongoConfig.Mechanism,
@@ -39,12 +41,11 @@ func main() {
 		Password:      mongoConfig.Password,
 	}
 
-	log.Printf(" current address===> %s\n", gotask.GetAddress())
-
-	opts := options.Client().ApplyURI(mongoConfig.Uri).
-		SetAuth(credential).SetReadConcern(readconcern.Majority()).
+	opts := options.Client().ApplyURI(mongoConfig.Uri).SetAuth(credential).
+		SetReadConcern(readconcern.Majority()).
 		SetMaxPoolSize(mongoConfig.MaxPoolSize).
-		SetMinPoolSize(mongoConfig.MinPoolSize).SetMaxConnIdleTime(60 * time.Second)
+		SetMinPoolSize(mongoConfig.MinPoolSize).
+		SetMaxConnIdleTime(60 * time.Second)
 
 	client, err := mongo.Connect(opts)
 	if err != nil {

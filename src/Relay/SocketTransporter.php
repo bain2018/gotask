@@ -28,7 +28,7 @@ trait SocketTransporter
         }
     }
 
-    public function send(?string $payload, int $flags = null)
+    public function send(?string $payload, ?int $flags = null)
     {
         $this->connect();
 
@@ -47,7 +47,7 @@ trait SocketTransporter
         return $this;
     }
 
-    public function receiveSync(int &$flags = null): ?string
+    public function receiveSync(?int &$flags = null): ?string
     {
         $this->connect();
 
@@ -62,6 +62,13 @@ trait SocketTransporter
             // Add ability to write to stream in a future
             while ($readBytes > 0) {
                 $buffer = $this->socket->recv(min(self::BUFFER_SIZE, $readBytes));
+                if ($buffer === false || $buffer === '') {
+                    throw new RelayException(sprintf(
+                        'unable to read payload from socket: %s (%s)',
+                        $this->socket->errMsg,
+                        $this->socket->errCode
+                    ));
+                }
                 $result .= $buffer;
                 $readBytes -= strlen($buffer);
             }
