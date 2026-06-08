@@ -2,6 +2,7 @@ module bridge
 
 go 1.25.0
 
+//https://proxy.golang.org/github.com/bain2018/gotask/@v/8928002.info
 require (
 	github.com/bain2018/gotask v0.0.0-20260112052056-5900b91da580
 	go.mongodb.org/mongo-driver/v2 v2.6.0
