@@ -59,7 +59,7 @@ class ConfigProvider
                 [
                     'id' => 'app',
                     'description' => 'The go main package template for gotask.',
-                    'source' => __DIR__ . '/../cmd/app.go',
+                    'source' => __DIR__ . '/../publish/app.go',
                     'destination' => BASE_PATH . '/gotask/app.go',
                 ],
                 [

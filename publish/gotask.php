@@ -47,6 +47,10 @@ return [
         'wait_timeout' => 30.0,
         'heartbeat' => -1,
         'max_idle_time' => (float) env('GOTASK_MAX_IDLE_TIME', 60),
+        'debug' => false,
+        'debug_wait_ms' => 20.0,
+        'debug_call_ms' => 200.0,
+        'debug_pressure_ratio' => 0.8,
     ],
     'args' =>$arr
 ];

@@ -14,6 +14,7 @@ namespace Hyperf\GoTask;
 
 use Hyperf\Context\Context;
 use Hyperf\GoTask\Exception\InvalidGoTaskConnectionException;
+use Throwable;
 
 use function Hyperf\Coroutine\defer;
 
@@ -31,15 +32,22 @@ class SocketGoTask implements GoTask
 
     public function call(string $method, mixed $payload, int $flags = 0): mixed
     {
+        $startedAt = microtime(true);
         $hasContextConnection = Context::has($this->getContextKey());
-        $connection = $this->getConnection($hasContextConnection);
+        $connection = null;
+        $throwable = null;
         try {
+            $connection = $this->getConnection($hasContextConnection);
             $connection = $connection->getConnection();
             // Execute the command with the arguments.
             $result = $connection->call($method, $payload, $flags);
+        } catch (Throwable $exception) {
+            $throwable = $exception;
+            throw $exception;
         } finally {
+            $this->pool->reportCall($method, (microtime(true) - $startedAt) * 1000, $hasContextConnection, $throwable);
             // Release connection.
-            if (! $hasContextConnection) {
+            if (! $hasContextConnection && $connection instanceof GoTaskConnection) {
                 Context::set($this->getContextKey(), $connection);
                 defer(function () use ($connection) {
                     $connection->release();
