@@ -44,7 +44,7 @@ func main() {
 	opts := options.Client().ApplyURI(mongoConfig.Uri).
 		SetAuth(credential).SetReadConcern(readconcern.Majority()).
 		SetMaxPoolSize(mongoConfig.MaxPoolSize).
-		SetMinPoolSize(mongoConfig.MaxPoolSize).SetMaxConnIdleTime(60 * time.Second)
+		SetMinPoolSize(mongoConfig.MinPoolSize).SetMaxConnIdleTime(60 * time.Second)
 
 	client, err := mongo.Connect(opts)
 	if err != nil {
